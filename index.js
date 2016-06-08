@@ -1,10 +1,12 @@
-//testing webhook
-var path_1 = require('path');
+"use strict";
+var path = require('path');
 var RaspiCam = require('raspicam');
 var camera = new RaspiCam({
     mode: 'photo',
     timelapse: 1000,
-    output: path_1.join(__dirname, 'captures/%d')
+    timeout: 0,
+    rotation: 180,
+    output: path.join(__dirname, 'captures/%d')
 });
 camera.on("started", function () {
     console.log('started taking photos every second (saved to captures directory)');
