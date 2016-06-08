@@ -6,7 +6,8 @@ var camera = new RaspiCam({
     timelapse: 1000,
     timeout: 0,
     rotation: 180,
-    output: path.join(__dirname, 'captures/%d')
+    preview: '100,100,200,200',
+    output: path.join(__dirname, 'captures/%d.jpg')
 });
 camera.on("started", function () {
     console.log('started taking photos every second (saved to captures directory)');
@@ -16,6 +17,16 @@ camera.on("read", function (e, f) { });
 //listen for the process to exit when the timeout has been reached
 camera.on("exited", function () { });
 //start taking timelapses
+console.log('starting camera...');
 camera.start();
-console.log('started');
+function exit() {
+    console.log('stopping camera...');
+    camera.stop();
+}
+//do something when app is closing
+process.on('exit', exit);
+//catches ctrl+c event
+process.on('SIGINT', exit);
+//catches uncaught exceptions
+process.on('uncaughtException', exit);
 //# sourceMappingURL=index.js.map
