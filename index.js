@@ -17,4 +17,5 @@ camera.on("read", function (e, f) { });
 camera.on("exited", function () { });
 //start taking timelapses
 camera.start();
+console.log('started');
 //# sourceMappingURL=index.js.map

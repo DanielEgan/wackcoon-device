@@ -21,3 +21,5 @@ camera.on("exited", () => { });
 
 //start taking timelapses
 camera.start();
+
+console.log('started');
