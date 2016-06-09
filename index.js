@@ -1,3 +1,4 @@
+"use strict";
 var path = require('path');
 var RaspiCam = require('raspicam');
 var needle = require('needle');
@@ -29,7 +30,9 @@ camera.on("read", function (e, f) {
     };
     needle.post('https://api.projectoxford.ai/vision/v1.0/analyze?' + params, data, options, function (err, resp) {
         // you can pass params as a string or as an object.
-        console.log(err);
+        console.log('err: ' + err);
+        console.log('msg: ' + err.message);
+        console.log(resp.status);
         console.log(resp.body);
     });
 });
@@ -38,7 +41,8 @@ camera.on("exited", function () { });
 //start taking timelapses
 console.log('starting camera...');
 camera.start();
-function exit() {
+function exit(x) {
+    console.log('x: ' + x);
     console.log('stopping camera...');
     camera.stop();
 }

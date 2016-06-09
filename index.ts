@@ -35,7 +35,9 @@ camera.on("read", (e, f) => {
 
     needle.post('https://api.projectoxford.ai/vision/v1.0/analyze?' + params, data, options, function (err, resp) {
         // you can pass params as a string or as an object.
-        console.log(err);
+        console.log('err: ' + err);
+        console.log('msg: ' + err.message);
+        console.log(resp.status)
         console.log(resp.body);
     });
 
@@ -49,7 +51,8 @@ console.log('starting camera...');
 camera.start();
 
 
-function exit() {
+function exit(x) {
+    console.log('x: ' + x);
     console.log('stopping camera...');
     camera.stop();
 }
