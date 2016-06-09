@@ -17,7 +17,7 @@ camera.on("started", function () {
     console.log('started taking photos every second (saved to captures directory)');
 });
 //when each photo is saved
-camera.on("read", function (e, f) {
+camera.on("read", function (e, ts, f) {
     var params = querystring.stringify({
         "visualFeatures": "Tags"
     });
@@ -38,7 +38,7 @@ camera.on("read", function (e, f) {
     //     console.log(resp.body);
     // });
     var formData = {
-        my_file: fs.createReadStream(__dirname + 'captures/' + f),
+        my_file: fs.createReadStream(__dirname + '/captures/' + f + '.jpg'),
     };
     request.post({
         url: 'https://api.projectoxford.ai/vision/v1.0/analyze?' + params,

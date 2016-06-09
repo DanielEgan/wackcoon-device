@@ -2,7 +2,7 @@ declare module 'raspicam' {
     class RaspiCam {
         constructor(options: RaspiCam.RaspiCamOptions);
         foo: string;
-        on(event: string, callback: (err?:Error, file?:any) => void);
+        on(event: string, callback: (err?:Error, timestamp?:any, file?:any) => void);
         start():void;
         stop():void;
     }

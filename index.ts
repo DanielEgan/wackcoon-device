@@ -19,7 +19,7 @@ camera.on("started", () => {
 });
 
 //when each photo is saved
-camera.on("read", (e, f) => {
+camera.on("read", (e, ts, f) => {
 
     var params = querystring.stringify({
         "visualFeatures": "Tags"
@@ -44,7 +44,7 @@ camera.on("read", (e, f) => {
     // });
 
     var formData = {
-        my_file: fs.createReadStream(__dirname + 'captures/' + f),
+        my_file: fs.createReadStream(__dirname + '/captures/' + f + '.jpg'),
     };
     request.post({
         url: 'https://api.projectoxford.ai/vision/v1.0/analyze?' + params,
