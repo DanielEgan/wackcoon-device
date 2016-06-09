@@ -38,7 +38,7 @@ camera.on("read", function (e, ts, f) {
     //     console.log(resp.body);
     // });
     var formData = {
-        my_file: fs.createReadStream(__dirname + '/captures/' + f + '.jpg'),
+        my_file: fs.createReadStream(__dirname + '/captures/' + f),
     };
     request.post({
         url: 'https://api.projectoxford.ai/vision/v1.0/analyze?' + params,
