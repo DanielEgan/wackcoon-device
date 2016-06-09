@@ -1,9 +1,11 @@
 import * as path from 'path';
 import RaspiCam = require('raspicam');
+var needle = require('needle');
+var querystring = require('querystring');
 
 let camera = new RaspiCam({
     mode: 'photo',
-    timelapse: 1000,
+    timelapse: 10000,
     timeout: 0,
     rotation: 180,
     preview: '100,100,200,200',
@@ -15,7 +17,28 @@ camera.on("started", () => {
 });
 
 //when each photo is saved
-camera.on("read", (e, f) => { });
+camera.on("read", (e, f) => {
+
+    var params = querystring.stringify({
+        "visualFeatures": "Tags"
+    });
+    console.log(f);
+    var data = {
+        file: 'captures/' + f,
+        content_type: 'image/png'
+    };
+
+    var options = {
+        headers: { 'Ocp-Apim-Subscription-Key': '48cdc4d0cd6d4bed9f1cb05dcfef72ec', 'Content-Type': 'application/json' }
+    }
+
+    needle.post('https://api.projectoxford.ai/vision/v1.0/analyze?' + params, data, options, function (err, resp) {
+        // you can pass params as a string or as an object.
+        console.log(err);
+        console.log(resp.body);
+    });
+
+});
 
 //listen for the process to exit when the timeout has been reached
 camera.on("exited", () => { });
