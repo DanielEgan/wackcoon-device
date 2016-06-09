@@ -23,10 +23,10 @@ camera.on("read", (e, f) => {
         "visualFeatures": "Tags"
     });
     console.log(f);
-    var data = {
+    var data = JSON.stringify({
         file: 'captures/' + f,
         content_type: 'image/png'
-    };
+    });
 
     var options = {
         headers: { 'Ocp-Apim-Subscription-Key': '48cdc4d0cd6d4bed9f1cb05dcfef72ec', 'Content-Type': 'application/json' }
