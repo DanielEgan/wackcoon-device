@@ -6,7 +6,7 @@ import RaspiCam = require('raspicam');
 
 let camera = new RaspiCam({
     mode: 'photo',
-    timelapse: 1000,
+    timelapse: 10000,
     timeout: 0,
     rotation: 180,
     preview: '100,100,200,200',
