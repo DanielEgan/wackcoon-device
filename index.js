@@ -21,10 +21,10 @@ camera.on("read", function (e, f) {
     console.log(f);
     var data = JSON.stringify({
         file: 'captures/' + f,
-        content_type: 'image/png'
+        content_type: 'image/jpg'
     });
     var options = {
-        headers: { 'Ocp-Apim-Subscription-Key': '48cdc4d0cd6d4bed9f1cb05dcfef72ec', 'Content-Type': 'image/jpg' },
+        headers: { 'Ocp-Apim-Subscription-Key': '48cdc4d0cd6d4bed9f1cb05dcfef72ec', 'Content-Type': 'multipart/form-data' },
         multipart: true
     };
     needle.post('https://api.projectoxford.ai/vision/v1.0/analyze?' + params, data, options, function (err, resp) {
