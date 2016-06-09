@@ -1,4 +1,6 @@
 import * as path from 'path';
+import * as fs from 'fs';
+var request = require('request');
 import RaspiCam = require('raspicam');
 var needle = require('needle');
 var querystring = require('querystring');
@@ -22,23 +24,35 @@ camera.on("read", (e, f) => {
     var params = querystring.stringify({
         "visualFeatures": "Tags"
     });
-    console.log(f);
-    var data = JSON.stringify({
-        file: 'captures/' + f,
-        content_type: 'image/jpg'
-    });
+    // console.log(f);
+    // var data = JSON.stringify({
+    //     file: 'captures/' + f,
+    //     content_type: 'image/jpg'
+    // });
 
-    var options = {
+    // var options = {
+    //     headers: { 'Ocp-Apim-Subscription-Key': '48cdc4d0cd6d4bed9f1cb05dcfef72ec', 'Content-Type': 'multipart/form-data' },
+    //     multipart: true
+    // }
+
+    // needle.post('https://api.projectoxford.ai/vision/v1.0/analyze?' + params, data, options, function (err, resp) {
+    //     // you can pass params as a string or as an object.
+    //     console.log('err: ' + err);
+    //     console.log('msg: ' + err.message);
+    //     console.log(resp.status)
+    //     console.log(resp.body);
+    // });
+
+    var formData = {
+        my_file: fs.createReadStream(__dirname + '/unicycle.jpg'),
+    };
+    request.post({
+        url: 'https://api.projectoxford.ai/vision/v1.0/analyze?' + params,
         headers: { 'Ocp-Apim-Subscription-Key': '48cdc4d0cd6d4bed9f1cb05dcfef72ec', 'Content-Type': 'multipart/form-data' },
-        multipart: true
-    }
-
-    needle.post('https://api.projectoxford.ai/vision/v1.0/analyze?' + params, data, options, function (err, resp) {
-        // you can pass params as a string or as an object.
-        console.log('err: ' + err);
-        console.log('msg: ' + err.message);
-        console.log(resp.status)
-        console.log(resp.body);
+        formData: formData
+    }, (err, httpResponse, body) => {
+        if (err) return console.error('upload failed:', err);
+        console.log('Upload successful!  Server responded with:', body);
     });
 
 });

@@ -1,5 +1,7 @@
 "use strict";
 var path = require('path');
+var fs = require('fs');
+var request = require('request');
 var RaspiCam = require('raspicam');
 var needle = require('needle');
 var querystring = require('querystring');
@@ -19,21 +21,33 @@ camera.on("read", function (e, f) {
     var params = querystring.stringify({
         "visualFeatures": "Tags"
     });
-    console.log(f);
-    var data = JSON.stringify({
-        file: 'captures/' + f,
-        content_type: 'image/jpg'
-    });
-    var options = {
-        headers: { 'Ocp-Apim-Subscription-Key': '48cdc4d0cd6d4bed9f1cb05dcfef72ec', 'Content-Type': 'multipart/form-data' },
-        multipart: true
+    // console.log(f);
+    // var data = JSON.stringify({
+    //     file: 'captures/' + f,
+    //     content_type: 'image/jpg'
+    // });
+    // var options = {
+    //     headers: { 'Ocp-Apim-Subscription-Key': '48cdc4d0cd6d4bed9f1cb05dcfef72ec', 'Content-Type': 'multipart/form-data' },
+    //     multipart: true
+    // }
+    // needle.post('https://api.projectoxford.ai/vision/v1.0/analyze?' + params, data, options, function (err, resp) {
+    //     // you can pass params as a string or as an object.
+    //     console.log('err: ' + err);
+    //     console.log('msg: ' + err.message);
+    //     console.log(resp.status)
+    //     console.log(resp.body);
+    // });
+    var formData = {
+        my_file: fs.createReadStream(__dirname + '/unicycle.jpg'),
     };
-    needle.post('https://api.projectoxford.ai/vision/v1.0/analyze?' + params, data, options, function (err, resp) {
-        // you can pass params as a string or as an object.
-        console.log('err: ' + err);
-        console.log('msg: ' + err.message);
-        console.log(resp.status);
-        console.log(resp.body);
+    request.post({
+        url: 'https://api.projectoxford.ai/vision/v1.0/analyze?' + params,
+        headers: { 'Ocp-Apim-Subscription-Key': '48cdc4d0cd6d4bed9f1cb05dcfef72ec', 'Content-Type': 'multipart/form-data' },
+        formData: formData
+    }, function (err, httpResponse, body) {
+        if (err)
+            return console.error('upload failed:', err);
+        console.log('Upload successful!  Server responded with:', body);
     });
 });
 //listen for the process to exit when the timeout has been reached
