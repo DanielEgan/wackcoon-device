@@ -1,5 +1,5 @@
 import * as path from 'path';
-var RaspiCam = require('raspicam');
+import RaspiCam = require('raspicam');
 
 let camera = new RaspiCam({
     mode: 'photo',
