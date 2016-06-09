@@ -17,7 +17,8 @@ camera.on("started", function () {
 });
 //when each photo is saved
 camera.on("read", function (e, ts, f) {
-    if (!f.search(/~/)) {
+    var isTempFile = /~/.test(f);
+    if (!isTempFile) {
         var params = querystring.stringify({
             "visualFeatures": "Tags"
         });
