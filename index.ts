@@ -44,7 +44,7 @@ camera.on("read", (e, f) => {
     // });
 
     var formData = {
-        my_file: fs.createReadStream(__dirname + '/unicycle.jpg'),
+        my_file: fs.createReadStream(__dirname + 'captures/' + f),
     };
     request.post({
         url: 'https://api.projectoxford.ai/vision/v1.0/analyze?' + params,
