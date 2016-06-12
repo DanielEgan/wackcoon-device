@@ -3,6 +3,7 @@ import * as fs from 'fs';
 import * as request from 'request';
 import * as querystring from 'querystring';
 import RaspiCam = require('raspicam');
+var azure = require('azure-storage');
 
 let camera = new RaspiCam({
     mode: 'photo',
@@ -34,7 +35,14 @@ camera.on("read", (e, ts, f) => {
         };
 
         request.post(options, (err, httpResponse, body) => {
-            console.log((err ? 'Error: ' + err : 'Success: ' + body));
+            if(err){
+                console.log('Error: ' + err);
+                
+            }else{
+                console.log('Success' + body);
+                
+            }
+            //console.log((err ? 'Error: ' + err : 'Success: ' + body));
         });
     }
 });

@@ -1,9 +1,9 @@
-"use strict";
 var path = require('path');
 var fs = require('fs');
 var request = require('request');
 var querystring = require('querystring');
 var RaspiCam = require('raspicam');
+var azure = require('azure-storage');
 var camera = new RaspiCam({
     mode: 'photo',
     timelapse: 10000,
@@ -30,7 +30,13 @@ camera.on("read", function (e, ts, f) {
             }
         };
         request.post(options, function (err, httpResponse, body) {
-            console.log((err ? 'Error: ' + err : 'Success: ' + body));
+            if (err) {
+                console.log('Error: ' + err);
+            }
+            else {
+                console.log('Success' + body);
+            }
+            //console.log((err ? 'Error: ' + err : 'Success: ' + body));
         });
     }
 });
