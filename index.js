@@ -42,11 +42,9 @@ camera.on("read", function (e, ts, f) {
                     for (i = 0; tags.length > i; i += 1) {
                         if (tags[i].tagName === tagName) {
                             console.log('found indoors tag');
-                            return true;
                         }
                     }
                     console.log('no indoors tag');
-                    return false;
                 };
                 console.log('Success' + body);
             }
