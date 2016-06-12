@@ -20,7 +20,7 @@ camera.on("started", () => {
 
 //when each photo is saved
 camera.on("read", (e, ts, f) => {
-    let isTempFile =/~/.test(f); 
+    let isTempFile = /~/.test(f);
     if (!isTempFile) {
         let params = querystring.stringify({
             "visualFeatures": "Tags"
@@ -35,13 +35,29 @@ camera.on("read", (e, ts, f) => {
         };
 
         request.post(options, (err, httpResponse, body) => {
-            if(err){
+            if (err) {
                 console.log('Error: ' + err);
-                
-            }else{
+
+            } else {
                 //in here we want to see if it is a raccoon and if so, save image
+                var tagName = indoors;
+                var tags = body.tags;
+                var hasTag = function (tagName) {
+                    var i = null;
+                    for (i = 0; tags.length > i; i += 1) {
+                        if (tags[i].tagName === tagName) {
+                            console.log('found indoors tag');
+                            
+                            return true;
+                        }
+                    }
+                    console.log('no indoors tag');
+                    
+                    return false;
+                };
+
                 console.log('Success' + body);
-                
+
             }
             //console.log((err ? 'Error: ' + err : 'Success: ' + body));
         });

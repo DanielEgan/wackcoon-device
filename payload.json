@@ -1,0 +1,26 @@
+{
+    "tags": [
+        {
+            "name": "indoor",
+            "confidence": 0.99626177549362183
+        },
+        {
+            "name": "table",
+            "confidence": 0.9787527322769165
+        },
+        {
+            "name": "desk",
+            "confidence": 0.91150057315826416
+        },
+        {
+            "name": "cluttered",
+            "confidence": 0.19791483879089355
+        }
+    ],
+    "requestId": "c573c0c4-8e56-4b40-bcce-1da27a5ac1db",
+    "metadata": {
+        "width": 640,
+        "height": 480,
+        "format": "Jpeg"
+    }
+}
