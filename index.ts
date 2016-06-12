@@ -39,6 +39,7 @@ camera.on("read", (e, ts, f) => {
                 console.log('Error: ' + err);
                 
             }else{
+                //in here we want to see if it is a raccoon and if so, save image
                 console.log('Success' + body);
                 
             }
