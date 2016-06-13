@@ -13,13 +13,15 @@ function createGUID() {
             });
         }
 
+var fileName = createGUID();
+
 let camera = new RaspiCam({
     mode: 'photo',
     timelapse: 10000,
     timeout: 0,
     rotation: 180,
     preview: '100,100,200,200',
-    output: path.join(__dirname, 'captures', createGUID + '.jpg')
+    output: path.join(__dirname, 'captures', fileName + '.jpg')
 });
 
 //creating azure container stuff
