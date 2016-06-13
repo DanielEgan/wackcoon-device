@@ -60,6 +60,11 @@ camera.on("read", (e, ts, f) => {
 
                     }
                 }
+                var data = body;
+                var jsonData = JSON.parse(data);
+                console.log(jsonData.tags.name);
+                console.log(jsonData["tags"].name);
+                
                 getTags('indoor', body);
 
                 console.log('Success ' + body);
