@@ -48,7 +48,7 @@ camera.on("read", function (e, ts, f) {
                     }
                     console.log('no indoors tag');
                 }
-                ;
+                getTags('indoors');
                 console.log('Success' + body);
             }
             //console.log((err ? 'Error: ' + err : 'Success: ' + body));
