@@ -76,6 +76,9 @@ camera.on("read", function (e, ts, f) {
                                 // file uploaded
                                 console.log('successfully uploaded to blob');
                             }
+                            else {
+                                console.log(error);
+                            }
                         });
                         console.log(f);
                     }

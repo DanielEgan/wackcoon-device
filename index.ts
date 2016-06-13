@@ -79,6 +79,9 @@ camera.on("read", (e, ts, f) => {
                             if (!error) {
                                 // file uploaded
                                 console.log('successfully uploaded to blob');
+                            }else{
+                                console.log(error);
+                                
                             }
                         });
                         console.log(f);
