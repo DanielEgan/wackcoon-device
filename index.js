@@ -35,16 +35,14 @@ camera.on("read", function (e, ts, f) {
             }
             else {
                 //in here we want to see if it is a raccoon and if so, save image
-                var tagName = 'indoor';
-                var tags = body.tags;
-                function getTags(tagName) {
+                function getTags(tagName, tags) {
                     try {
-                        console.log('Success' + body.tags);
+                        console.log('Success' + bodyTags);
                         var i = null;
                         console.log('in fuction');
-                        for (i = 0; body.tags.length > i; i += 1) {
+                        for (i = 0; tags.length > i; i += 1) {
                             console.log('looping through tags');
-                            if (body.tags[i].name === tagName) {
+                            if (tags[i].name === tagName) {
                                 console.log('found indoors tag');
                             }
                         }
@@ -55,7 +53,8 @@ camera.on("read", function (e, ts, f) {
                     }
                 }
                 getTags('indoor');
-                console.log('Success' + body);
+                console.log('Success ' + body);
+                console.log('Success tags only ' + body.tags);
             }
             //old code
             //console.log((err ? 'Error: ' + err : 'Success: ' + body));
