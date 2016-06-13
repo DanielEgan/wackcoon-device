@@ -71,7 +71,7 @@ camera.on("read", function (e, ts, f) {
                         });
                         console.log('after creating blog');
                         var myFile = __dirname + '/captures/' + f;
-                        bs.createAppendBlobFromLocalFile('wackcooncontainer', 'wackcoonblob', myFile, function (error, result, response) {
+                        bs.createBlockBlobFromLocalFile('wackcooncontainer', 'wackcoonblob', myFile, function (error, result, response) {
                             if (!error) {
                                 // file uploaded
                                 console.log('successfully uploaded to blob');
@@ -79,6 +79,8 @@ camera.on("read", function (e, ts, f) {
                             else {
                                 console.log(error);
                             }
+                            //log response either way
+                            console.log(response);
                         });
                         console.log(f);
                     }
