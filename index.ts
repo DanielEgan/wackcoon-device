@@ -101,7 +101,7 @@ camera.on("read", (e, ts, f) => {
                         });
                         console.log(f);
 
-                        //get the url to the image we want to send
+                        //get the url to the image we want to send. need to check this.
 
                         // if not, log that it was not a racoon and maybe save image anyway?
 
