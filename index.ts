@@ -12,7 +12,7 @@ let camera = new RaspiCam({
     timeout: 0,
     rotation: 180,
     preview: '100,100,200,200',
-    output: path.join(__dirname, 'captures', '%d.jpg')
+    output: path.join(__dirname, 'captures', new Date() + '.jpg')
 });
 
 //creating azure container stuff
