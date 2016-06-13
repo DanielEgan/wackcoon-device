@@ -43,7 +43,8 @@ camera.on("read", (e, ts, f) => {
                 var tagName = 'indoor';
                 var tags = body.tags;
                 function getTags(tagName, tagsToUse) {
-
+                    try{
+                    
                     var i = null;
                     console.log('in fuction');
                     
@@ -55,6 +56,11 @@ camera.on("read", (e, ts, f) => {
                         }
                     }
                     console.log('no indoors tag');
+
+                    }catch(err){
+                        console.log(err);
+                        
+                    }
                 }
                 getTags('indoor', body.tags);
 

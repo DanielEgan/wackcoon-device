@@ -38,15 +38,20 @@ camera.on("read", function (e, ts, f) {
                 var tagName = 'indoor';
                 var tags = body.tags;
                 function getTags(tagName, tagsToUse) {
-                    var i = null;
-                    console.log('in fuction');
-                    for (i = 0; tags.length > i; i += 1) {
-                        console.log('looping through tags');
-                        if (tags[i].tagName === tagName) {
-                            console.log('found indoors tag');
+                    try {
+                        var i = null;
+                        console.log('in fuction');
+                        for (i = 0; tags.length > i; i += 1) {
+                            console.log('looping through tags');
+                            if (tags[i].tagName === tagName) {
+                                console.log('found indoors tag');
+                            }
                         }
+                        console.log('no indoors tag');
                     }
-                    console.log('no indoors tag');
+                    catch (err) {
+                        console.log(err);
+                    }
                 }
                 getTags('indoor', body.tags);
                 console.log('Success' + body);
