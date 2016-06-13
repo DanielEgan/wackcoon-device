@@ -78,7 +78,7 @@ camera.on("read", (e, ts, f) => {
                         // If we are confident that it is a racoon (or any other word for testing) 
                         // then want to upload to blob storage
                         var myFile = __dirname + '/captures/' + f;
-                        bs.createBlockBlobFromLocalFile('wackcooncontainer', 'wackcoonblob', myFile, function (error, result, response) {
+                        bs.createBlockBlobFromLocalFile('wackcooncontainer', 'wackcoonblob' + f.slice(0,4), myFile, function (error, result, response) {
                             if (!error) {
                                 // file uploaded
                                 console.log('successfully uploaded to blob');
