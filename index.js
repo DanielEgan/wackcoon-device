@@ -52,7 +52,7 @@ camera.on("read", function (e, ts, f) {
                         console.log(err);
                     }
                 }
-                getTags('indoor');
+                getTags('indoor', body);
                 console.log('Success ' + body);
                 console.log('Success tags only ' + body.tags);
             }
