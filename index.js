@@ -54,8 +54,10 @@ camera.on("read", function (e, ts, f) {
                 }
                 var data = body;
                 var jsonData = JSON.parse(data);
-                console.log(jsonData.tags.name);
-                console.log(jsonData["tags"].name);
+                console.log('test one: ' + jsonData.tags.name);
+                console.log('test two: ' + jsonData["tags"].name);
+                console.log('test three: ' + body.tags.name);
+                console.log('test four: ' + body["tags"].name);
                 getTags('indoor', body);
                 console.log('Success ' + body);
                 console.log('Success tags only ' + body.tags);
