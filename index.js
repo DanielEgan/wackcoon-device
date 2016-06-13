@@ -52,13 +52,8 @@ camera.on("read", function (e, ts, f) {
                         console.log(err);
                     }
                 }
-                var data = body;
-                var jsonData = JSON.parse(data);
-                console.log('test one: ' + body.tags.name);
-                console.log('test two: ' + body["tags"].name);
                 getTags('indoor', body);
                 console.log('Success ' + body);
-                console.log('Success tags only ' + body.tags);
             }
             //old code
             //console.log((err ? 'Error: ' + err : 'Success: ' + body));

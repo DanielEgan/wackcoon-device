@@ -60,17 +60,14 @@ camera.on("read", (e, ts, f) => {
 
                     }
                 }
-                var data = body;
-                var jsonData = JSON.parse(data);
-                console.log('test one: ' + body.tags.name);
-                console.log('test two: ' + body["tags"].name);
+
 
 
                 
                 getTags('indoor', body);
 
                 console.log('Success ' + body);
-                console.log('Success tags only ' + body.tags);
+
 
             }
             //old code
