@@ -45,6 +45,25 @@ camera.on("read", function (e, ts, f) {
                 console.log('Success ' + body);
                 //we want to parse the JSON to pull out the name and confidence in the name
                 try {
+                    //creating azure container stuff
+                    console.log('before creating blog');
+                    var bs = azure.createBlobService();
+                    bs.createContainerIfNotExists('wackcooncontainer', {
+                        publicAccessLevel: 'blob'
+                    }, function (error, result, response) {
+                        if (!error) {
+                            // if result = true, container was created.
+                            if (result === true) {
+                                console.log('container create');
+                            }
+                            else {
+                                // if result = false, container already existed.
+                                console.log('container exists');
+                            }
+                        }
+                    });
+                    console.log('after creating blob');
+                    //parsing json
                     var o = JSON.parse(body);
                     for (var i = 0; i < o.tags.length; i++) {
                         var name = o.tags[i].name;
@@ -53,23 +72,6 @@ camera.on("read", function (e, ts, f) {
                         console.log(confidence);
                         // If we are confident that it is a racoon (or any other word for testing) 
                         // then want to upload to blob storage
-                        console.log('before creating blog');
-                        var bs = azure.createBlobService();
-                        bs.createContainerIfNotExists('wackcooncontainer', {
-                            publicAccessLevel: 'blob'
-                        }, function (error, result, response) {
-                            if (!error) {
-                                // if result = true, container was created.
-                                if (result === true) {
-                                    console.log('container create');
-                                }
-                                else {
-                                    // if result = false, container already existed.
-                                    console.log('container exists');
-                                }
-                            }
-                        });
-                        console.log('after creating blog');
                         var myFile = __dirname + '/captures/' + f;
                         bs.createBlockBlobFromLocalFile('wackcooncontainer', 'wackcoonblob', myFile, function (error, result, response) {
                             if (!error) {
