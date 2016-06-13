@@ -39,6 +39,7 @@ camera.on("read", function (e, ts, f) {
                 var tags = body.tags;
                 function getTags(tagName, tagsToUse) {
                     try {
+                        tags = tagsToUse;
                         var i = null;
                         console.log('in fuction');
                         for (i = 0; tags.length > i; i += 1) {
