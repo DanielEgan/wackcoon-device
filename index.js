@@ -36,8 +36,8 @@ camera.on("read", function (e, ts, f) {
             else {
                 //in here we want to see if it is a raccoon and if so, save image
                 var tagName = 'indoor';
-                var tags = body.tags;
                 function getTags(tagName) {
+                    var tags = body.tags;
                     var i = null;
                     console.log('in fuction');
                     for (i = 0; tags.length > i; i += 1) {
