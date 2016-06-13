@@ -75,7 +75,7 @@ camera.on("read", (e, ts, f) => {
                         console.log('after creating blog');
                         
                         var myFile = __dirname + '/captures/' + f;
-                        bs.createBlockBlobFromLocalFile('wackcooncontainer', 'wackcoonblob', myFile, function (error, result, response) {
+                        bs.createAppendBlobFromLocalFile('wackcooncontainer', 'wackcoonblob', myFile, function (error, result, response) {
                             if (!error) {
                                 // file uploaded
                                 console.log('successfully uploaded to blob');
