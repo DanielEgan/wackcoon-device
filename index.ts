@@ -46,7 +46,7 @@ camera.on("read", (e, ts, f) => {
                     for (var i = 0; i < o.tags.length; i++) {
                         var name = o.tags[i].name;
                         var confidence = o.tags[i].confidence;
-                        console.log(nm);
+                        console.log(name);
                         console.log(confidence);
                     }
                 } catch (error) {
