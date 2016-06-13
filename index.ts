@@ -67,6 +67,7 @@ camera.on("read", (e, ts, f) => {
                 console.log('Success' + body);
 
             }
+            //old code
             //console.log((err ? 'Error: ' + err : 'Success: ' + body));
         });
     }
