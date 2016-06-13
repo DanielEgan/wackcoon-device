@@ -52,19 +52,13 @@ camera.on("read", function (e, ts, f) {
                         console.log(err);
                     }
                 }
-
-                console.log('Success ' + body);
                 var data = body;
-                console.log(data);
-                
                 var jsonData = JSON.parse(data);
-                console.log('test one: ' + jsonData.tags.name);
-                console.log('test two: ' + jsonData["tags"].name);
-                console.log('test three: ' + body.tags.name);
-                console.log('test four: ' + body["tags"].name);
+                console.log('test one: ' + body.tags.name);
+                console.log('test two: ' + body["tags"].name);
                 getTags('indoor', body);
-                
-               
+                console.log('Success ' + body);
+                console.log('Success tags only ' + body.tags);
             }
             //old code
             //console.log((err ? 'Error: ' + err : 'Success: ' + body));
