@@ -15,6 +15,25 @@ let camera = new RaspiCam({
     output: path.join(__dirname, 'captures', '%d.jpg')
 });
 
+//creating azure container stuff
+console.log('before creating blob');
+
+var bs = azure.createBlobService();
+bs.createContainerIfNotExists('wackcooncontainer', {
+    publicAccessLevel: 'blob'
+}, function (error, result, response) {
+    if (!error) {
+        // if result = true, container was created.
+        if (result === true) {
+            console.log('container create');
+        } else {
+            // if result = false, container already existed.
+            console.log('container exists');
+        }
+    }
+});
+console.log('after creating blob');
+
 camera.on("started", () => {
     console.log('started taking photos every second (saved to captures directory)')
 });
@@ -48,24 +67,7 @@ camera.on("read", (e, ts, f) => {
                 console.log('Success ' + body);
                 //we want to parse the JSON to pull out the name and confidence in the name
                 try {
-                    //creating azure container stuff
-                    console.log('before creating blog');
 
-                    var bs = azure.createBlobService();
-                    bs.createContainerIfNotExists('wackcooncontainer', {
-                        publicAccessLevel: 'blob'
-                    }, function (error, result, response) {
-                        if (!error) {
-                            // if result = true, container was created.
-                            if (result === true) {
-                                console.log('container create');
-                            } else {
-                                // if result = false, container already existed.
-                                console.log('container exists');
-                            }
-                        }
-                    });
-                    console.log('after creating blob');
                     //parsing json
                     var o = JSON.parse(body);
                     for (var i = 0; i < o.tags.length; i++) {
