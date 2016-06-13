@@ -53,9 +53,9 @@ camera.on("read", function (e, ts, f) {
                         console.log(confidence);
                         // If we are confident that it is a racoon (or any other word for testing) 
                         // then want to upload to blob storage
-                        var path = path.join(__dirname, 'captures');
+                        console.log('before creating blog');
                         var bs = azure.createBlobService();
-                        blobService.createContainerIfNotExists('wackcooncontainer', {
+                        bs.createContainerIfNotExists('wackcooncontainer', {
                             publicAccessLevel: 'blob'
                         }, function (error, result, response) {
                             if (!error) {
@@ -69,8 +69,9 @@ camera.on("read", function (e, ts, f) {
                                 }
                             }
                         });
-                        var myFile = path.join(__dirname, 'captures', f);
-                        blobService.createBlockBlobFromLocalFile('wackcooncontainer', 'wackcoonblob', myFile, function (error, result, response) {
+                        console.log('after creating blog');
+                        var myFile = __dirname + 'captures/' + f;
+                        bs.createBlockBlobFromLocalFile('wackcooncontainer', 'wackcoonblob', myFile, function (error, result, response) {
                             if (!error) {
                                 // file uploaded
                                 console.log('successfully uploaded to blob');
