@@ -5,6 +5,7 @@ import * as querystring from 'querystring';
 import RaspiCam = require('raspicam');
 var azure = require('azure-storage');
 
+
 let camera = new RaspiCam({
     mode: 'photo',
     timelapse: 10000,
@@ -20,12 +21,16 @@ camera.on("started", () => {
 
 //when each photo is saved
 camera.on("read", (e, ts, f) => {
+    //Checking to see if it is a test file
     let isTempFile = /~/.test(f);
+    //If it is not then load up to send to Vision API
     if (!isTempFile) {
+        //List of tags requested, currently only looking for tags
         let params = querystring.stringify({
             "visualFeatures": "Tags"
         });
-
+        //Create headers and form data
+        //ToDo: Key should be held somewhere else
         let options = {
             url: 'https://api.projectoxford.ai/vision/v1.0/analyze?' + params,
             headers: { 'Ocp-Apim-Subscription-Key': '48cdc4d0cd6d4bed9f1cb05dcfef72ec', 'Content-Type': 'multipart/form-data' },
@@ -33,14 +38,15 @@ camera.on("read", (e, ts, f) => {
                 my_file: fs.createReadStream(path.join(__dirname, 'captures', f)),
             }
         };
-
+        //Returning JSON from call 
         request.post(options, (err, httpResponse, body) => {
             if (err) {
                 console.log('Error: ' + err);
-
             } else {
                 //in here we want to see if it is a raccoon and if so, save image
+                //for testing, this is the full JSON
                 console.log('Success ' + body);
+                //we want to parse the JSON to pull out the name and confidence in the name
                 try {
                     var o = JSON.parse(body);
                     for (var i = 0; i < o.tags.length; i++) {
@@ -48,6 +54,17 @@ camera.on("read", (e, ts, f) => {
                         var confidence = o.tags[i].confidence;
                         console.log(name);
                         console.log(confidence);
+                        // If we are confident that it is a racoon (or any other word for testing) 
+                        // then want to upload to blob storage
+                        console.log(f);
+                        
+                        //get the url to the image
+
+                        // if not, log that it was not a racoon and maybe save image anyway?
+
+
+                        //delete the one on disk
+
                     }
                 } catch (error) {
                     console.log(error);
