@@ -70,7 +70,7 @@ camera.on("read", function (e, ts, f) {
                             }
                         });
                         console.log('after creating blog');
-                        var myFile = __dirname + 'captures/' + f;
+                        var myFile = __dirname + '/captures/' + f;
                         bs.createBlockBlobFromLocalFile('wackcooncontainer', 'wackcoonblob', myFile, function (error, result, response) {
                             if (!error) {
                                 // file uploaded
