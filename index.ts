@@ -6,13 +6,20 @@ import RaspiCam = require('raspicam');
 var azure = require('azure-storage');
 
 
+function createGUID() {
+            return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
+                var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
+                return v.toString(16);
+            });
+        }
+
 let camera = new RaspiCam({
     mode: 'photo',
     timelapse: 10000,
     timeout: 0,
     rotation: 180,
     preview: '100,100,200,200',
-    output: path.join(__dirname, 'captures', new Date() + '.jpg')
+    output: path.join(__dirname, 'captures', createGUID + '.jpg')
 });
 
 //creating azure container stuff
