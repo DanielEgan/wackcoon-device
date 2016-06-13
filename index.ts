@@ -67,6 +67,8 @@ camera.on("read", (e, ts, f) => {
                 getTags('indoor', body);
 
                 console.log('Success ' + body);
+                console.log('Success ' + body["tags"]);
+
 
 
             }
