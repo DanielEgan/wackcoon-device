@@ -57,7 +57,10 @@ camera.on("read", function (e, ts, f) {
                 var jstring = JSON.stringify(body);
                 console.log('Success ' + jstring);
                 try {
-                    console.log(jstring.tags.name);
+                    var array = JSON.parse(body);
+                    array.forEach(function (object) {
+                        console.log(object.name);
+                    });
                 }
                 catch (error) {
                     console.log(error);
