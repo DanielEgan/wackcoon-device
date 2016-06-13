@@ -54,7 +54,7 @@ camera.on("read", function (e, ts, f) {
                 }
                 getTags('indoor', body);
                 console.log('Success ' + body);
-                console.log('Success ' + body["tags"]);
+                console.log('Success ' + JSON.stringify(body));
             }
             //old code
             //console.log((err ? 'Error: ' + err : 'Success: ' + body));
