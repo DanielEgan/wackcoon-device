@@ -5,11 +5,12 @@ import * as querystring from 'querystring';
 import RaspiCam = require('raspicam');
 var azure = require('azure-storage');
 var clientFromConnectionString = require('azure-iot-device-amqp').clientFromConnectionString;
-var Message = require('azure-iot-device').Message;
+var device = require('azure-iot-device');
 
-var connectionString =  process.env.WACKCOON1_DEVICE_CONNECTIONSTRING;
+var connectionString = process.env.WACKCOON1_DEVICE_CONNECTIONSTRING;
 
-var client = clientFromConnectionString(connectionString);
+//var client = clientFromConnectionString(connectionString);
+var client = new device.Client(connectionString, new device.Https());
 
 function printResultFor(op) {
     return function printResult(err, res) {
@@ -90,6 +91,15 @@ camera.on("read", (e, ts, f) => {
                 console.log('Success ' + body);
                 //we want to parse the JSON to pull out the name and confidence in the name
                 try {
+                    //send to iot hub
+                    var data = body;
+                    var message = new device.Message(data);
+                    message.properties.add('myproperty', 'myvalue');
+                    client.sendEvent(message, function (err, res) {
+                        if (err) console.log('SendEvent error: ' + err.toString());
+                        if (res) console.log('SendEvent status: ' + res.statusCode + ' ' + res.statusMessage);
+                    });
+
 
                     //parsing json
                     var o = JSON.parse(body);
@@ -113,24 +123,7 @@ camera.on("read", (e, ts, f) => {
                             console.log(response);
 
                         });
-                        //send data to eventhub
-                        /*
-                        var connectCallback = function (err) {
-                            if (err) {
-                                console.log('Could not connect: ' + err);
-                            } else {
-                                console.log('Client connected');
 
-                                // Create a message and send it to the IoT Hub
-                                    var message = new Message(body);
-                                    console.log("Sending message: " + message.getData());
-                                    client.sendEvent(message, printResultFor('send'));
-                                
-                            }
-                        };
-
-                        client.open(connectCallback);
-                        */
                         console.log(process.env.WACKCOON1_DEVICE_CONNECTIONSTRING);
 
                         //get the url to the image we want to send. need to check this.
