@@ -105,18 +105,23 @@ camera.on("read", function (e, ts, f) {
                             console.log(response);
                         });
                         //send data to eventhub
+                        /*
                         var connectCallback = function (err) {
                             if (err) {
                                 console.log('Could not connect: ' + err);
-                            }
-                            else {
+                            } else {
                                 console.log('Client connected');
+
                                 // Create a message and send it to the IoT Hub
-                                var message = new Message(body);
-                                console.log("Sending message: " + message.getData());
-                                client.sendEvent(message, printResultFor('send'));
+                                    var message = new Message(body);
+                                    console.log("Sending message: " + message.getData());
+                                    client.sendEvent(message, printResultFor('send'));
+                                
                             }
                         };
+
+                        client.open(connectCallback);
+                        */
                         console.log(process.env.WACKCOON1_DEVICE_CONNECTIONSTRING);
                     }
                 }
