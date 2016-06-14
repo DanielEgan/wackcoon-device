@@ -19,6 +19,25 @@ function printResultFor(op) {
     };
 }
 
+var connectCallback = function (err) {
+  if (err) {
+    console.log('Could not connect: ' + err);
+  } else {
+    console.log('Client connected');
+
+    // Create a message and send it to the IoT Hub every second
+    setInterval(function(){
+        var windSpeed = 10 + (Math.random() * 4);
+        var data = JSON.stringify({ deviceId: 'mydevice', windSpeed: windSpeed });
+        var message = new Message(data);
+        console.log("Sending message: " + message.getData());
+        client.sendEvent(message, printResultFor('send'));
+    }, 2000);
+  }
+};
+
+client.open(connectCallback);
+
 function createGUID() {
     return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
         var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
@@ -90,23 +109,6 @@ camera.on("read", (e, ts, f) => {
                 console.log('Success ' + body);
                 //we want to parse the JSON to pull out the name and confidence in the name
                 try {
-
-                    var connectCallback = function (err) {
-                        if (err) {
-                            console.log('Could not connect: ' + err);
-                        } else {
-                            console.log('Client connected');
-
-                            // Create a message and send it to the IoT Hub
-                            var data = body;
-                            var message = new Message(data);
-                            console.log("Sending message: " + message.getData());
-                            client.sendEvent(message, printResultFor('send'));
-                        }
-                    };
-
-                    //turn on connection to iot hub
-                    client.open(connectCallback);
 
                     //parsing json
                     var o = JSON.parse(body);
