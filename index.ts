@@ -127,8 +127,9 @@ camera.on("read", (e, ts, f) => {
                                 
                             }
                         };
-
-                        client.open(connectCallback);
+                        console.log(process.env.WACKCOON1_DEVICE_CONNECTIONSTRING);
+                        
+                        //client.open(connectCallback);
 
                         //get the url to the image we want to send. need to check this.
 

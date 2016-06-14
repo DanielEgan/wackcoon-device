@@ -117,7 +117,7 @@ camera.on("read", function (e, ts, f) {
                                 client.sendEvent(message, printResultFor('send'));
                             }
                         };
-                        client.open(connectCallback);
+                        console.log(process.env.WACKCOON1_DEVICE_CONNECTIONSTRING);
                     }
                 }
                 catch (error) {
