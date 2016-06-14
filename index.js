@@ -5,20 +5,29 @@ var querystring = require('querystring');
 var RaspiCam = require('raspicam');
 var azure = require('azure-storage');
 var clientFromConnectionString = require('azure-iot-device-amqp').clientFromConnectionString;
-var device = require('azure-iot-device');
+var Message = require('azure-iot-device').Message;
 var connectionString = process.env.WACKCOON1_DEVICE_CONNECTIONSTRING;
 var client = clientFromConnectionString(connectionString);
 //var client = new device.Client(connectionString, new device.Https());
 // Create a message and send it to IoT Hub.
-var data = JSON.stringify({ 'deviceId': 'myFirstDevice', 'data': 'mydata' });
-var message = new device.Message(data);
-message.properties.add('myproperty', 'myvalue');
-client.sendEvent(message, function (err, res) {
-    if (err)
-        console.log('SendEvent error: ' + err.toString());
-    if (res)
-        console.log('SendEvent status: ' + res.statusCode + ' ' + res.statusMessage);
+var data = [
+    { id: 1, message: 'hello' },
+    { id: 2, message: 'world' }
+];
+var messages = [];
+data.forEach(function (value) {
+    messages.push(new Message(JSON.stringify(value)));
 });
+console.log('sending ' + messages.length + ' events in a batch');
+client.sendEventBatch(messages, printResultFor('send'));
+function printResultFor(op) {
+    return function printResult(err, res) {
+        if (err)
+            console.log(op + ' error: ' + err.toString());
+        if (res)
+            console.log(op + ' status: ' + res.statusCode + ' ' + res.statusMessage);
+    };
+}
 function createGUID() {
     return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
         var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
