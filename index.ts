@@ -10,15 +10,8 @@ var device = require('azure-iot-device');
 var connectionString = process.env.WACKCOON1_DEVICE_CONNECTIONSTRING;
 
 //var client = clientFromConnectionString(connectionString);
-var client = new device.Client(connectionString, new device.Https());
-
-function printResultFor(op) {
-    return function printResult(err, res) {
-        if (err) console.log(op + ' error: ' + err.toString());
-        if (res) console.log(op + ' status: ' + res.constructor.name);
-    };
-}
-
+//var client = new device.Client(connectionString, new device.Https());
+console.log(process.env.WACKCOON1_DEVICE_CONNECTIONSTRING);
 
 
 function createGUID() {
@@ -91,7 +84,7 @@ camera.on("read", (e, ts, f) => {
                 console.log('Success ' + body);
                 //we want to parse the JSON to pull out the name and confidence in the name
                 try {
-                    //send to iot hub
+/*                    //send to iot hub
                     var data = body;
                     var message = new device.Message(data);
                     message.properties.add('myproperty', 'myvalue');
@@ -99,7 +92,7 @@ camera.on("read", (e, ts, f) => {
                         if (err) console.log('SendEvent error: ' + err.toString());
                         if (res) console.log('SendEvent status: ' + res.statusCode + ' ' + res.statusMessage);
                     });
-
+*/
 
                     //parsing json
                     var o = JSON.parse(body);
