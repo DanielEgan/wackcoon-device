@@ -5,14 +5,19 @@ import * as querystring from 'querystring';
 import RaspiCam = require('raspicam');
 var azure = require('azure-storage');
 var clientFromConnectionString = require('azure-iot-device-amqp').clientFromConnectionString;
-var device = require('azure-iot-device');
-
+var Message = require('azure-iot-device').Message;
 var connectionString = process.env.WACKCOON1_DEVICE_CONNECTIONSTRING;
 
-//var client = clientFromConnectionString(connectionString);
+var client = clientFromConnectionString(connectionString);
 //var client = new device.Client(connectionString, new device.Https());
 console.log(process.env.WACKCOON1_DEVICE_CONNECTIONSTRING);
 
+function printResultFor(op) {
+    return function printResult(err, res) {
+        if (err) console.log(op + ' error: ' + err.toString());
+        if (res) console.log(op + ' status: ' + res.constructor.name);
+    };
+}
 
 function createGUID() {
     return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
@@ -74,6 +79,7 @@ camera.on("read", (e, ts, f) => {
                 my_file: fs.createReadStream(path.join(__dirname, 'captures', f)),
             }
         };
+        //open connection to IOT Hub
         //Returning JSON from call 
         request.post(options, (err, httpResponse, body) => {
             if (err) {
@@ -84,15 +90,23 @@ camera.on("read", (e, ts, f) => {
                 console.log('Success ' + body);
                 //we want to parse the JSON to pull out the name and confidence in the name
                 try {
-/*                    //send to iot hub
-                    var data = body;
-                    var message = new device.Message(data);
-                    message.properties.add('myproperty', 'myvalue');
-                    client.sendEvent(message, function (err, res) {
-                        if (err) console.log('SendEvent error: ' + err.toString());
-                        if (res) console.log('SendEvent status: ' + res.statusCode + ' ' + res.statusMessage);
-                    });
-*/
+
+                    var connectCallback = function (err) {
+                        if (err) {
+                            console.log('Could not connect: ' + err);
+                        } else {
+                            console.log('Client connected');
+
+                            // Create a message and send it to the IoT Hub
+                            var data = body;
+                            var message = new Message(data);
+                            console.log("Sending message: " + message.getData());
+                            client.sendEvent(message, printResultFor('send'));
+                        }
+                    };
+
+                    //turn on connection to iot hub
+                    client.open(connectCallback);
 
                     //parsing json
                     var o = JSON.parse(body);
@@ -136,6 +150,7 @@ camera.on("read", (e, ts, f) => {
         });
     }
 });
+
 
 //start taking timelapses
 console.log('starting camera...');
