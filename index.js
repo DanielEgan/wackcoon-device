@@ -10,24 +10,29 @@ var connectionString = process.env.WACKCOON1_DEVICE_CONNECTIONSTRING;
 var client = clientFromConnectionString(connectionString);
 //var client = new device.Client(connectionString, new device.Https());
 // Create a message and send it to IoT Hub.
-var data = [
-    { id: 1, message: 'hello' },
-    { id: 2, message: 'world' }
-];
-var messages = [];
-data.forEach(function (value) {
-    messages.push(new Message(JSON.stringify(value)));
-});
-console.log('sending ' + messages.length + ' events in a batch');
-client.sendEventBatch(messages, printResultFor('send'));
+var data = JSON.stringify({ 'deviceId': 'myFirstDevice', 'data': 'mydata' });
 function printResultFor(op) {
     return function printResult(err, res) {
         if (err)
             console.log(op + ' error: ' + err.toString());
         if (res)
-            console.log(op + ' status: ' + res.statusCode + ' ' + res.statusMessage);
+            console.log(op + ' status: ' + res.constructor.name);
     };
 }
+function sendIOTMessage(data) {
+    var message = new Message(data);
+    console.log("Sending message: " + message.getData());
+    client.sendEvent(message, printResultFor('send'));
+}
+var connectCallback = function (err) {
+    if (err) {
+        console.log('Could not connect: ' + err);
+    }
+    else {
+        console.log('Client connected');
+    }
+};
+client.open(connectCallback);
 function createGUID() {
     return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
         var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
@@ -96,6 +101,8 @@ camera.on("read", function (e, ts, f) {
                 //we want to parse the JSON to pull out the name and confidence in the name
                 try {
                     //parsing json
+                    //send to iot hub
+                    sendIOTMessage(body);
                     var o = JSON.parse(body);
                     for (var i = 0; i < o.tags.length; i++) {
                         var name = o.tags[i].name;
