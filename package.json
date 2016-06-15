@@ -23,6 +23,7 @@
     "azure-storage": "^1.0.1",
     "needle": "^1.0.0",
     "raspicam": "^0.2.13",
-    "request": "^2.72.0"
+    "request": "^2.72.0",
+    "resemblejs": "^2.2.1"
   }
 }

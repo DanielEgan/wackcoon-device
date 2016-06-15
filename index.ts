@@ -3,7 +3,9 @@ import * as fs from 'fs';
 import * as request from 'request';
 import * as querystring from 'querystring';
 import RaspiCam = require('raspicam');
+var resemble = require('resemblejs');
 var azure = require('azure-storage');
+
 var clientFromConnectionString = require('azure-iot-device-amqp').clientFromConnectionString;
 var Message = require('azure-iot-device').Message;
 
@@ -28,11 +30,11 @@ function printResultFor(op) {
         }
 
 var connectCallback = function (err) {
-  if (err) {
-    console.log('Could not connect: ' + err);
-  } else {
-    console.log('Client connected');
-  }
+    if (err) {
+        console.log('Could not connect: ' + err);
+    } else {
+        console.log('Client connected');
+    }
 };
 
 client.open(connectCallback);
@@ -79,11 +81,20 @@ camera.on("started", () => {
 });
 
 //when each photo is saved
+let lastfile;
 camera.on("read", (e, ts, f) => {
     //Checking to see if it is a test file
     let isTempFile = /~/.test(f);
     //If it is not then load up to send to Vision API
     if (!isTempFile) {
+        //compare file to last file
+        if(lastfile) {
+            let diff = resemble(f).compareTo(lastfile).onComplete(data => {
+                console.log('difference: ' + data.misMatchPercentage)
+            });
+        }
+        lastfile = f;
+
         //List of tags requested, currently only looking for tags
         let params = querystring.stringify({
             "visualFeatures": "Tags"

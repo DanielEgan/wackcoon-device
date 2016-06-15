@@ -1,6 +1,7 @@
 {
   "globalDependencies": {
-    "node": "registry:dt/node#6.0.0+20160602155235"
+    "node": "registry:dt/node#6.0.0+20160602155235",
+    "resemblejs": "registry:dt/resemblejs#1.3.0+20160318162952"
   },
   "dependencies": {
     "request": "registry:npm/request#2.69.0+20160428223725"
