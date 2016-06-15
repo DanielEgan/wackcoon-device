@@ -82,8 +82,13 @@ camera.on("read", function (e, ts, f) {
             if (lastfile) {
                 var file1 = __dirname + '/captures/' + f;
                 var file2 = __dirname + '/captures/' + lastfile;
-                var diff = resemble(file1).compareTo(file2).onComplete(function (data) {
-                    console.log('difference: ' + data.misMatchPercentage);
+                var fileData1 = fs.readFileSync(file1);
+                var fileData2 = fs.readFileSync(file2);
+                resemble(fileData1).compareTo(fileData2)
+                    .ignoreRectangles([[325, 170, 100, 40]])
+                    .onComplete(function (data) {
+                    console.log('with ignore rectangle:', data);
+                    data.getDiffImage().pack().pipe(fs.createWriteStream('diffr.png'));
                 });
             }
             lastfile = f;
