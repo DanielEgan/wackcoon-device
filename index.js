@@ -3,6 +3,7 @@ var fs = require('fs');
 var request = require('request');
 var querystring = require('querystring');
 var RaspiCam = require('raspicam');
+var resemble = require('resemblejs');
 var azure = require('azure-storage');
 var clientFromConnectionString = require('azure-iot-device-amqp').clientFromConnectionString;
 var Message = require('azure-iot-device').Message;
@@ -70,11 +71,19 @@ camera.on("started", function () {
     console.log('started taking photos every second (saved to captures directory)');
 });
 //when each photo is saved
+var lastfile;
 camera.on("read", function (e, ts, f) {
     //Checking to see if it is a test file
     var isTempFile = /~/.test(f);
     //If it is not then load up to send to Vision API
     if (!isTempFile) {
+        //compare file to last file
+        if (lastfile) {
+            var diff = resemble(f).compareTo(lastfile).onComplete(function (data) {
+                console.log('difference: ' + data.misMatchPercentage);
+            });
+        }
+        lastfile = f;
         //List of tags requested, currently only looking for tags
         var params = querystring.stringify({
             "visualFeatures": "Tags"
