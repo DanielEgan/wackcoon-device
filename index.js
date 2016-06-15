@@ -80,7 +80,9 @@ camera.on("read", function (e, ts, f) {
         //compare file to last 
         try {
             if (lastfile) {
-                var diff = resemble(f).compareTo(lastfile).onComplete(function (data) {
+                var file1 = __dirname + '/captures/' + f;
+                var file2 = __dirname + '/captures/' + lastfile;
+                var diff = resemble(file1).compareTo(file2).onComplete(function (data) {
                     console.log('difference: ' + data.misMatchPercentage);
                 });
             }
