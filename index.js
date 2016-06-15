@@ -77,13 +77,18 @@ camera.on("read", function (e, ts, f) {
     var isTempFile = /~/.test(f);
     //If it is not then load up to send to Vision API
     if (!isTempFile) {
-        //compare file to last file
-        if (lastfile) {
-            var diff = resemble(f).compareTo(lastfile).onComplete(function (data) {
-                console.log('difference: ' + data.misMatchPercentage);
-            });
+        //compare file to last 
+        try {
+            if (lastfile) {
+                var diff = resemble(f).compareTo(lastfile).onComplete(function (data) {
+                    console.log('difference: ' + data.misMatchPercentage);
+                });
+            }
+            lastfile = f;
         }
-        lastfile = f;
+        catch (error) {
+            console.log(error);
+        }
         //List of tags requested, currently only looking for tags
         var params = querystring.stringify({
             "visualFeatures": "Tags"

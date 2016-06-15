@@ -23,11 +23,11 @@ function printResultFor(op) {
         if (res) console.log(op + ' status: ' + res.constructor.name);
     };
 }
-    function sendIOTMessage(data){
-        var message = new Message(data);
-        console.log("Sending message: " + message.getData());
-        client.sendEvent(message, printResultFor('send'));
-        }
+function sendIOTMessage(data) {
+    var message = new Message(data);
+    console.log("Sending message: " + message.getData());
+    client.sendEvent(message, printResultFor('send'));
+}
 
 var connectCallback = function (err) {
     if (err) {
@@ -87,13 +87,19 @@ camera.on("read", (e, ts, f) => {
     let isTempFile = /~/.test(f);
     //If it is not then load up to send to Vision API
     if (!isTempFile) {
-        //compare file to last file
-        if(lastfile) {
-            let diff = resemble(f).compareTo(lastfile).onComplete(data => {
-                console.log('difference: ' + data.misMatchPercentage)
-            });
+        //compare file to last 
+        try {
+            if (lastfile) {
+                let diff = resemble(f).compareTo(lastfile).onComplete(data => {
+                    console.log('difference: ' + data.misMatchPercentage)
+                });
+            }
+            lastfile = f;
+        } catch (error) {
+            console.log(error);
+
         }
-        lastfile = f;
+
 
         //List of tags requested, currently only looking for tags
         let params = querystring.stringify({
