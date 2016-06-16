@@ -14,7 +14,8 @@ declare module 'raspicam' {
             timeout: number,
             rotation: number,
             preview: string,
-            output: string
+            output: string,
+            encoding: string
         }
     }
 
