@@ -4,28 +4,41 @@ import * as fs from 'fs';
 // import * as querystring from 'querystring';
 // var resemble = require('node-resemble-js');
 // var azure = require('azure-storage');
-
 // var clientFromConnectionString = require('azure-iot-device-amqp').clientFromConnectionString;
 // var Message = require('azure-iot-device').Message;
-// var connectionString = process.env.WACKCOON1_DEVICE_CONNECTIONSTRING;
-// var client = clientFromConnectionString(connectionString);
+
+let imagesRoot = path.join('..', 'images');
+
+//watch the images folder (up one from -device) for new images to land
+fs.watch(imagesRoot, (event, filename) => {
+    //only consider files that match the pattern of <number>.png
+    if (/^\d+\.png/.test(filename)) {
+        console.log(event + ':' + filename);
+
+        //rename the file
+        var oldFilename = path.join(imagesRoot, filename);
+        filename = path.join(imagesRoot, 'img' + Date.now() + '.png');
+        if (fs.existsSync(oldFilename)) fs.rename(oldFilename, filename);
 
 
-//PSEUDOCODE
-//watch the files
-//on file
-//   get its mismatchpercentage
-//   if it's different enough then cog it and store it
+        //get mismatch percentage
+        let mismatch;
+        let last_file;
+        let this_file = fs.readFileSync(path.join(imagesRoot, filename));
+        if (last_file) {
+            resemble(this_file).compareTo(last_file)
+                .onComplete(function (data) {
+                    mismatch = data.misMatchPercentage;
+                });
+        }
+        last_file = this_file;
 
+        // TODO: if mismatch is over 20% then cog it and store it
+        if (parseFloat(mismatch) > 20) {
+            var connectionString = process.env.WACKCOON1_DEVICE_CONNECTIONSTRING;
+            var client = clientFromConnectionString(connectionString);
+        }
 
-fs.watch('../images', (event, filename) => {
-    if (/\d*.png/.test(filename)) {
-        console.log(filename);
-
-        //         // //rename the file
-        //         // var oldFilename = path.join(imagesRoot, f);
-        //         // var newFilename = path.join(imagesRoot, ts + '.png');
-        //         // fs.renameSync(oldFilename, newFilename);
     }
 });
 
@@ -76,22 +89,6 @@ fs.watch('../images', (event, filename) => {
 //     }
 // });
 // console.log('after creating blob');
-
-// //when each photo is saved
-// let last_file;
-// var i = 1;
-
-// function onFileWatch() {
-
-//     //compare file to last 
-//     let this_file = fs.readFileSync(path.join(imagesRoot, f));
-//     if (last_file) {
-//         resemble(this_file).compareTo(last_file)
-//             .onComplete(function (data) {
-//                 console.log(data.misMatchPercentage);
-//             });
-//     }
-//     last_file = this_file;
 
 //     //     //List of tags requested, currently only looking for tags
 //     //     let params = querystring.stringify({
@@ -160,13 +157,3 @@ fs.watch('../images', (event, filename) => {
 //     //         //console.log((err ? 'Error: ' + err : 'Success: ' + body));
 //     //     });
 // }
-
-
-//catch crashes and unexpected exits
-process.on('exit', () => stop('exit'));
-process.on('SIGINT', () => stop('SIGINT'));
-process.on('uncaughtException', (err) => stop(err));
-
-function stop(reason) {
-    console.log(reason);
-}
