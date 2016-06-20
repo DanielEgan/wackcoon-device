@@ -1,48 +1,69 @@
 import * as path from 'path';
 import * as fs from 'fs';
+var PiMotion = require('node-pi-motion');
+var resemble = require('node-resemble-js');
+var moment = require('moment');
 // import * as request from 'request';
 // import * as querystring from 'querystring';
-// var resemble = require('node-resemble-js');
 // var azure = require('azure-storage');
 // var clientFromConnectionString = require('azure-iot-device-amqp').clientFromConnectionString;
 // var Message = require('azure-iot-device').Message;
 
-let imagesRoot = path.join('..', 'images');
 
+let REVERSE_BUFFER = 10000;
+let FORWARD_BUFFER = 20000;
+let DIFFERENCE_THRESHOLD = 20; //percent
+let recordingStart = null;
+let recordingTimer;
+
+let imagesRoot = path.join('..', 'images');
+let imageEvents: any[];
+
+//setup the PIR
+var nodePiMotion = new PiMotion({ throttle: 200, night: true });
+
+//TRIGGER 1: MOTION SENSOR
+nodePiMotion.on('DetectedMotion', () => imageEvents.push(Date.now()));
+
+//TRIGGER 2: IMAGE DIFF
 //watch the images folder (up one from -device) for new images to land
 fs.watch(imagesRoot, (event, filename) => {
-    //only consider files that match the pattern of <number>.png
     if (/^\d+\.png/.test(filename)) {
-        console.log(event + ':' + filename);
-
-        //rename the file
-        var oldFilename = path.join(imagesRoot, filename);
-        filename = path.join(imagesRoot, 'img' + Date.now() + '.png');
-        if (fs.existsSync(oldFilename)) fs.rename(oldFilename, filename);
-
-
-        //get mismatch percentage
-        let mismatch;
-        let last_file;
+        let mismatch, last_file;
         let this_file = fs.readFileSync(path.join(imagesRoot, filename));
         if (last_file) {
             resemble(this_file).compareTo(last_file)
                 .onComplete(function (data) {
-                    mismatch = data.misMatchPercentage;
+                    if (parseFloat(data.misMatchPercentage) > DIFFERENCE_THRESHOLD)
+                        imageEvents.push(Date.now());
                 });
+            //send diff information to iothub
         }
         last_file = this_file;
-
-        // TODO: if mismatch is over 20% then cog it and store it
-        if (parseFloat(mismatch) > 20) {
-            var connectionString = process.env.WACKCOON1_DEVICE_CONNECTIONSTRING;
-            var client = clientFromConnectionString(connectionString);
-        }
-
     }
 });
 
+setInterval(processFiles, 1000);
 
+function processFiles() {
+    fs.readdir(imagesRoot, (err, files) => {
+        files.forEach(file => {
+            if (/^\d+\.png/.test(file)) {
+                if ("file fits in a image event") {
+                    //cog and save it
+                }
+                else if ("file is older than reverse buffer") {
+                    //delete it
+                }
+            }
+        });
+    });
+}
+
+
+
+// var connectionString = process.env.WACKCOON1_DEVICE_CONNECTIONSTRING;
+// var client = clientFromConnectionString(connectionString);
 
 // //var client = new device.Client(connectionString, new device.Https());
 // // Create a message and send it to IoT Hub.
