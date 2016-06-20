@@ -1,6 +1,5 @@
 import * as path from 'path';
 import * as fs from 'fs';
-var PiMotion = require('node-pi-motion');
 var resemble = require('node-resemble-js');
 var moment = require('moment');
 // import * as request from 'request';
@@ -9,27 +8,24 @@ var moment = require('moment');
 // var clientFromConnectionString = require('azure-iot-device-amqp').clientFromConnectionString;
 // var Message = require('azure-iot-device').Message;
 
-
-let REVERSE_BUFFER = 10000;
-let FORWARD_BUFFER = 20000;
+let REVERSE_BUFFER = 60;
+let FORWARD_BUFFER = 120;
 let DIFFERENCE_THRESHOLD = 20; //percent
 let recordingStart = null;
 let recordingTimer;
 
 let imagesRoot = path.join('..', 'images');
-let imageEvents: any[];
-
-//setup the PIR
-var nodePiMotion = new PiMotion({ throttle: 200, night: true });
+let imageEvents: any[] = [];
 
 //TRIGGER 1: MOTION SENSOR
-nodePiMotion.on('DetectedMotion', () => imageEvents.push(Date.now()));
+// when the IR sensor 
 
 //TRIGGER 2: IMAGE DIFF
 //watch the images folder (up one from -device) for new images to land
+let last_file;
 fs.watch(imagesRoot, (event, filename) => {
-    if (/^\d+\.png/.test(filename)) {
-        let mismatch, last_file;
+    if (event === 'rename' && /^\d+\.png$/.test(filename) && fs.existsSync(path.join(imagesRoot, filename))) {
+        let mismatch;
         let this_file = fs.readFileSync(path.join(imagesRoot, filename));
         if (last_file) {
             resemble(this_file).compareTo(last_file)
@@ -37,7 +33,7 @@ fs.watch(imagesRoot, (event, filename) => {
                     if (parseFloat(data.misMatchPercentage) > DIFFERENCE_THRESHOLD)
                         imageEvents.push(Date.now());
                 });
-            //send diff information to iothub
+            //consider sending diff information to iothub here
         }
         last_file = this_file;
     }
@@ -48,19 +44,24 @@ setInterval(processFiles, 1000);
 function processFiles() {
     fs.readdir(imagesRoot, (err, files) => {
         files.forEach(file => {
-            if (/^\d+\.png/.test(file)) {
-                if ("file fits in a image event") {
-                    //cog and save it
-                }
-                else if ("file is older than reverse buffer") {
-                    //delete it
-                }
-            }
+            if (/^\d+\.png$/.test(file)) {
+                let birthtime = fs.statSync(path.join(imagesRoot, file)).birthtime;
+                let match = false;
+                imageEvents.forEach(e => {
+                    let reverse = moment(e).subtract(REVERSE_BUFFER, 'seconds');
+                    let forward = moment(e).add(FORWARD_BUFFER, 'seconds');
+                    if (moment(birthtime).isBetween(reverse, forward, null, '[]'))
+                        match = true;
+                })
+                let expired = moment(birthtime).isBefore(moment(Date.now()).subtract(REVERSE_BUFFER, 'seconds'));
+                if (match)
+                    console.log('cog and save ' + file);
+                else if(match || expired)
+                    fs.unlinkSync(path.join(imagesRoot, file));
+            };
         });
     });
 }
-
-
 
 // var connectionString = process.env.WACKCOON1_DEVICE_CONNECTIONSTRING;
 // var client = clientFromConnectionString(connectionString);

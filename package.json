@@ -21,6 +21,7 @@
     "azure-iot-device": "^1.0.7",
     "azure-iot-device-amqp": "^1.0.7",
     "azure-storage": "^1.0.1",
+    "moment": "^2.13.0",
     "needle": "^1.0.0",
     "node-resemble-js": "0.0.5",
     "request": "^2.72.0"
