@@ -1,7 +1,7 @@
 import * as path from 'path';
 import * as fs from 'fs';
 var resemble = require('node-resemble-js');
-var moment = require('moment');
+import * as moment from 'moment';
 import * as gpio from 'pi-gpio';
 // import * as request from 'request';
 // import * as querystring from 'querystring';
