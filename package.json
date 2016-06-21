@@ -24,6 +24,7 @@
     "moment": "^2.13.0",
     "needle": "^1.0.0",
     "node-resemble-js": "0.0.5",
+    "pi-gpio": "0.0.8",
     "request": "^2.72.0"
   }
 }
