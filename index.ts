@@ -61,6 +61,8 @@ function processFiles() {
         files.forEach(file => {
             let filepath = path.join(imagesRoot, file);
             if (/^\d+\.png$/.test(file)) {
+                console.log('picking up ' + file);
+                
                 let birthtime = fs.statSync(filepath).birthtime;
                 let match = false;
                 imageEvents.forEach(e => {
@@ -71,19 +73,24 @@ function processFiles() {
                 })
                 let expired = moment(birthtime).isBefore(moment(Date.now()).subtract(REVERSE_BUFFER, 'seconds'));
                 if (match) {
+                    console.log('cogging ' + file);
+                    
                     store.cog(filepath, result => {
-                        result.tags.forEach(t => {
-                            console.log(t.name);
-                            console.log(t.confidence);
+                        console.log(result);
+                        store.sendToHub()
+                        
+                        // result.tags.forEach(t => {
+                        //     console.log(t.name);
+                        //     console.log(t.confidence);
+     
 
-                            // if confident, upload to blob storage
-                            store.save(filepath, result => {
+                        //     // if confident, upload to blob storage
+                        //     store.save(filepath, result => {
 
-                            });
+                        //     });
 
-                        });
+                        // });
 
-                        // store.sendToHub()
 
                     });
 

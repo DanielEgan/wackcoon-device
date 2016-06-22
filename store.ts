@@ -31,11 +31,6 @@ export module store {
 
     export function sendToHub() {
         let client = clientFromConnectionString(process.env.WACKCOON1_DEVICE_CONNECTIONSTRING);
-        //var client = new device.Client(connectionString, new device.Https());
-
-        // Create a message and send it to IoT Hub.
-        var data = JSON.stringify({ 'deviceId': 'myFirstDevice', 'data': 'mydata' });
-
         client.open(err => console.log(err ? 'Could not connect: ' + err : 'Client connected'));
 
         function sendIOTMessage(data) {
