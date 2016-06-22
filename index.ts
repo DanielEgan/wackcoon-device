@@ -88,7 +88,7 @@ function processFiles() {
                     });
 
                 }
-                else if (match || expired)
+                if (match || expired)
                     fs.unlinkSync(filepath);
             };
         });
