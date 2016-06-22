@@ -5,6 +5,7 @@ import * as path from 'path';
 import * as azure from 'azure-storage';
 let Message = require('azure-iot-device').Message;
 let clientFromConnectionString = require('azure-iot-device-amqp').clientFromConnectionString;
+let client = clientFromConnectionString(process.env.WACKCOON1_DEVICE_CONNECTIONSTRING);
 
 export module store {
 
@@ -29,8 +30,7 @@ export module store {
         });
     }
 
-    export function sendToHub() {
-        let client = clientFromConnectionString(process.env.WACKCOON1_DEVICE_CONNECTIONSTRING);
+    export function sendToHub(data) {
         client.open(err => console.log(err ? 'Could not connect: ' + err : 'Client connected'));
 
         function sendIOTMessage(data) {

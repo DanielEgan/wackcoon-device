@@ -78,7 +78,7 @@ function processFiles() {
                     
                     store.cog(filepath, result => {
                         console.log(result);
-                        store.sendToHub()
+                        store.sendToHub(result);
                         
                         // result.tags.forEach(t => {
                         //     console.log(t.name);
