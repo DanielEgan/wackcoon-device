@@ -29,15 +29,15 @@ export module store {
         });
     }
 
-    export function sendToHub() {
+    export function sendToHub(data) {
         let client = clientFromConnectionString(process.env.WACKCOON1_DEVICE_CONNECTIONSTRING);
         client.open(err => console.log(err ? 'Could not connect: ' + err : 'Client connected'));
-
-        function sendIOTMessage(data) {
-            var message = new Message(data);
+            console.log('aobut to send ' + data);
+            console.log('stringify? ' + JSON.stringify(data));
+            var message = new Message(JSON.stringify(data));
             console.log("Sending message: " + message.getData());
             client.sendEvent(message, printResultFor('send'));
-        }
+        
     }
 
     export function save(file: string, callback: (result: any) => void) {
