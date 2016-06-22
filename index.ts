@@ -54,7 +54,7 @@ fs.watch(imagesRoot, (event, filename) => {
     }
 });
 
-setInterval(processFiles, 1000);
+setInterval(processFiles, 4000);
 
 function processFiles() {
     fs.readdir(imagesRoot, (err, files) => {
