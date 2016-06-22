@@ -21,14 +21,15 @@ let imageEvents: any[] = [];
 //TRIGGER 1: MOTION SENSOR
 // when the IR sensor goes high
 // cachedValue is used to debounce the signal
-gpio.open(4, "input", function (err) {
+let pin = 7;
+gpio.open(pin, "input", function (err) {
     let lastValue = null;
-    setInterval(gpio.read(4, function (err, value) {
+    setInterval(() => { gpio.read(pin, (err, value) => {
         if (lastValue === 0 && value === 1) {
             imageEvents.push(Date.now());
             console.log('detected motion');
         }
-    }), 200);
+    })}, 200);
 });
 
 //TRIGGER 2: IMAGE DIFF
