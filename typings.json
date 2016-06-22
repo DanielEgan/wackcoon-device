@@ -3,6 +3,7 @@
     "node": "registry:dt/node#6.0.0+20160602155235"
   },
   "dependencies": {
+    "azure-storage": "registry:npm/azure-storage#0.10.0+20160526142523",
     "request": "registry:npm/request#2.69.0+20160428223725"
   }
 }
