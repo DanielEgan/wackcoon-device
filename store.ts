@@ -33,6 +33,8 @@ export module store {
         let client = clientFromConnectionString(process.env.WACKCOON1_DEVICE_CONNECTIONSTRING);
         client.open(err => console.log(err ? 'Could not connect: ' + err : 'Client connected'));
             console.log('aobut to send ' + data);
+            console.log('connection string: ' + process.env.WACKCOON1_DEVICE_CONNECTIONSTRING);
+            
             console.log('stringify? ' + JSON.stringify(data));
             var message = new Message(JSON.stringify(data));
             console.log("Sending message: " + message.getData());

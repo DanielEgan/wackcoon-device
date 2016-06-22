@@ -6,7 +6,7 @@ import { store } from './store';
 
 let REVERSE_BUFFER = 60;
 let FORWARD_BUFFER = 120;
-let DIFFERENCE_THRESHOLD = 20; //percent
+let DIFFERENCE_THRESHOLD = 1; //percent
 let recordingStart = null;
 let recordingTimer;
 
