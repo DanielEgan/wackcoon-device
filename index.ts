@@ -3,7 +3,7 @@ import * as fs from 'fs';
 var resemble = require('node-resemble-js');
 import * as moment from 'moment';
 import * as gpio from 'pi-gpio';
-import * as store from './store';
+import { store } from './store';
 
 let REVERSE_BUFFER = 60;
 let FORWARD_BUFFER = 120;
@@ -19,12 +19,12 @@ let imageEvents: any[] = [];
 // cachedValue is used to debounce the signal
 gpio.open(4, "input", function (err) {
     let lastValue = null;
-    setInterval(gpio.read(4, function (err, value) {
+    setInterval(() => { gpio.read(4, function (err, value) {
         if (lastValue === 0 && value === 1) {
             imageEvents.push(Date.now());
             console.log('detected motion');
         }
-    }), 200);
+    })}, 200);
 });
 
 //TRIGGER 2: IMAGE DIFF
@@ -51,8 +51,9 @@ setInterval(processFiles, 1000);
 function processFiles() {
     fs.readdir(imagesRoot, (err, files) => {
         files.forEach(file => {
+            let filepath = path.join(imagesRoot, file);
             if (/^\d+\.png$/.test(file)) {
-                let birthtime = fs.statSync(path.join(imagesRoot, file)).birthtime;
+                let birthtime = fs.statSync(filepath).birthtime;
                 let match = false;
                 imageEvents.forEach(e => {
                     let reverse = moment(e).subtract(REVERSE_BUFFER, 'seconds');
@@ -61,10 +62,26 @@ function processFiles() {
                         match = true;
                 })
                 let expired = moment(birthtime).isBefore(moment(Date.now()).subtract(REVERSE_BUFFER, 'seconds'));
-                if (match)
-                    console.log('cog and save ' + file);
+                if (match) {
+                    store.cog(filepath, result => {
+                        result.tags.forEach(t => {
+                            console.log(t.name);
+                            console.log(t.confidence);
+
+                            // if confident, upload to blob storage
+                            store.save(filepath, result => {
+
+                            });
+
+                        });
+
+                        // store.sendToHub()
+
+                    });
+
+                }
                 else if (match || expired)
-                    fs.unlinkSync(path.join(imagesRoot, file));
+                    fs.unlinkSync(filepath);
             };
         });
     });
