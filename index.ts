@@ -14,6 +14,14 @@ let recordingTimer;
 let imagesRoot = path.join('..', 'images');
 let imageEvents: any[] = [];
 
+//start with a clean folder
+fs.readdir(imagesRoot, (err, files) => {
+    files.forEach(file => {
+        console.log('deleting ' + path.join(imagesRoot,file));
+        fs.unlinkSync(path.join(imagesRoot,file));
+    })
+});
+
 //TRIGGER 1: MOTION SENSOR
 // when the IR sensor goes high
 // cachedValue is used to debounce the signal
