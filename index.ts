@@ -2,7 +2,7 @@ import * as path from 'path';
 import * as fs from 'fs';
 var resemble = require('node-resemble-js');
 import * as moment from 'moment';
-import * as gpio from 'pi-gpio';
+// import * as gpio from 'pi-gpio';
 import { store } from './store';
 
 let REVERSE_BUFFER = 60;
@@ -17,15 +17,15 @@ let imageEvents: any[] = [];
 //TRIGGER 1: MOTION SENSOR
 // when the IR sensor goes high
 // cachedValue is used to debounce the signal
-gpio.open(4, "input", function (err) {
-    let lastValue = null;
-    setInterval(() => { gpio.read(4, function (err, value) {
-        if (lastValue === 0 && value === 1) {
-            imageEvents.push(Date.now());
-            console.log('detected motion');
-        }
-    })}, 200);
-});
+// gpio.open(4, "input", function (err) {
+//     let lastValue = null;
+//     setInterval(() => { gpio.read(4, function (err, value) {
+//         if (lastValue === 0 && value === 1) {
+//             imageEvents.push(Date.now());
+//             console.log('detected motion');
+//         }
+//     })}, 200);
+// });
 
 //TRIGGER 2: IMAGE DIFF
 //watch the images folder (up one from -device) for new images to land
