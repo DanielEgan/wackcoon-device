@@ -25,16 +25,16 @@ fs.readdir(imagesRoot, (err, files) => {
 //TRIGGER 1: MOTION SENSOR
 // when the IR sensor goes high
 // cachedValue is used to debounce the signal
-let pin = 7;
-gpio.open(pin, "input", function (err) {
-    let lastValue = null;
-    setInterval(() => { gpio.read(pin, (err, value) => {
-        if (lastValue === 0 && value === 1) {
-            imageEvents.push(Date.now());
-            console.log('detected motion');
-        }
-    })}, 200);
-});
+// let pin = 7;
+// gpio.open(pin, "input", function (err) {
+//     let lastValue = null;
+//     setInterval(() => { gpio.read(pin, (err, value) => {
+//         if (lastValue === 0 && value === 1) {
+//             imageEvents.push(Date.now());
+//             console.log('detected motion');
+//         }
+//     })}, 200);
+// });
 
 //TRIGGER 2: IMAGE DIFF
 //watch the images folder (up one from -device) for new images to land
