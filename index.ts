@@ -1,13 +1,12 @@
 import * as path from 'path';
 import * as fs from 'fs';
 var resemble = require('node-resemble-js');
-import * as moment from 'moment';
-// import * as gpio from 'pi-gpio';
+import * as moment from 'moment'
 import { store } from './store';
 
 let REVERSE_BUFFER = 60;
 let FORWARD_BUFFER = 120;
-let DIFFERENCE_THRESHOLD = 20; //percent
+let DIFFERENCE_THRESHOLD = 1; //percent
 let recordingStart = null;
 let recordingTimer;
 
@@ -17,24 +16,24 @@ let imageEvents: any[] = [];
 //start with a clean folder
 fs.readdir(imagesRoot, (err, files) => {
     files.forEach(file => {
-        console.log('deleting ' + path.join(imagesRoot,file));
-        fs.unlinkSync(path.join(imagesRoot,file));
+        console.log('deleting ' + path.join(imagesRoot, file));
+        fs.unlinkSync(path.join(imagesRoot, file));
     })
 });
 
 //TRIGGER 1: MOTION SENSOR
 // when the IR sensor goes high
 // cachedValue is used to debounce the signal
-// let pin = 7;
-// gpio.open(pin, "input", function (err) {
-//     let lastValue = null;
-//     setInterval(() => { gpio.read(pin, (err, value) => {
-//         if (lastValue === 0 && value === 1) {
-//             imageEvents.push(Date.now());
-//             console.log('detected motion');
-//         }
-//     })}, 200);
-// });
+/*let pin = 7;
+gpio.open(pin, "input", function (err) {
+    let lastValue = null;
+    setInterval(() => { gpio.read(pin, (err, value) => {
+        if (lastValue === 0 && value === 1) {
+            imageEvents.push(Date.now());
+            console.log('detected motion');
+        }
+    })}, 200);
+});*/
 
 //TRIGGER 2: IMAGE DIFF
 //watch the images folder (up one from -device) for new images to land
@@ -63,7 +62,7 @@ function processFiles() {
             let filepath = path.join(imagesRoot, file);
             if (/^\d+\.png$/.test(file)) {
                 console.log('picking up ' + file);
-                
+
                 let birthtime = fs.statSync(filepath).birthtime;
                 let match = false;
                 imageEvents.forEach(e => {
@@ -75,22 +74,46 @@ function processFiles() {
                 let expired = moment(birthtime).isBefore(moment(Date.now()).subtract(REVERSE_BUFFER, 'seconds'));
                 if (match) {
                     console.log('cogging ' + file);
-                    
+
                     store.cog(filepath, result => {
                         console.log(result);
-                        store.sendToHub(result);
-                        
-                        // result.tags.forEach(t => {
-                        //     console.log(t.name);
-                        //     console.log(t.confidence);
-     
+                        console.log('sending to hub');
 
-                        //     // if confident, upload to blob storage
-                        //     store.save(filepath, result => {
+                        store.sendToHub(result)
 
-                        //     });
 
-                        // });
+
+                        result.tags.forEach(t => {
+                            console.log(t.name);
+                            console.log(t.confidence);
+
+                            
+                            if (t.name == 'raccoon'){
+                                console.log('WE FOUND A RACCOON!!!');
+                                 console.log('WE FOUND A RACCOON!!!');
+                                  console.log('WE FOUND A RACCOON!!!');
+                                   console.log('WE FOUND A RACCOON!!!');
+                                    console.log('WE FOUND A RACCOON!!!');
+                                     console.log('SHOOT IT WITH WATER!!!');
+                                        console.log('                   __        .-.');
+                                        console.log('               .-"` .` .    |\\| ');  
+                                        console.log('       _(\-/)_" ,  .   ,\  /\\\/ ');
+                                        console.log('      {(#b^d#)} .   ./,  |/\\\/  ');
+                                        console.log('      `-.(Y).-`  ,  |  , |\.-`   ');
+                                        console.log('           /~/,_/~~~\,__.-`         ');
+                                        console.log('          ////~    // ~\\');
+                                        console.log('         ==`==`   ==`   ==  ');
+                                     
+                                
+                            }
+
+
+/*                            // if confident, upload to blob storage
+                            store.save(filepath, result => {
+
+                            });*/
+
+                        });
 
 
                     });
