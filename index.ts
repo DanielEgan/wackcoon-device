@@ -3,6 +3,7 @@ import * as fs from 'fs';
 var resemble = require('node-resemble-js');
 import * as moment from 'moment'
 import { store } from './store';
+var spawn = require("child_process").spawn;
 
 let REVERSE_BUFFER = 60;
 let FORWARD_BUFFER = 120;
@@ -89,6 +90,8 @@ function processFiles() {
 
                             
                             if (t.name == 'raccoon'){
+                                var process = spawn('python',["turnon.py"]);
+                                setTimeout(()=> { var process = spawn('python',["turnon.py"]);},5000);
                                 console.log('WE FOUND A RACCOON!!!');
                                  console.log('WE FOUND A RACCOON!!!');
                                   console.log('WE FOUND A RACCOON!!!');
