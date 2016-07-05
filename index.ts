@@ -12,13 +12,16 @@ let recordingStart = null;
 let recordingTimer;
 
 let imagesRoot = path.join('../', 'wackcoon-camera');
+
 let imageEvents: any[] = [];
 
 //start with a clean folder
 fs.readdir(imagesRoot, (err, files) => {
     files.forEach(file => {
-        console.log('deleting ' + path.join(imagesRoot, file));
-        fs.unlinkSync(path.join(imagesRoot, file));
+        if (/^[\d_]+\.png$/.test(file)) {
+            console.log('deleting ' + path.join(imagesRoot, file));
+            fs.unlinkSync(path.join(imagesRoot, file));
+        }
     })
 });
 
@@ -40,9 +43,10 @@ gpio.open(pin, "input", function (err) {
 //watch the images folder (up one from -device) for new images to land
 let last_file;
 fs.watch(imagesRoot, (event, filename) => {
-    if (event === 'rename' && /^\d+\.png$/.test(filename) && fs.existsSync(path.join(imagesRoot, filename))) {
+    if (event === 'rename' && /^[\d_]+\.png$/.test(filename) && fs.existsSync(path.join(imagesRoot, filename))) {
         let mismatch;
         let this_file = fs.readFileSync(path.join(imagesRoot, filename));
+        
         if (last_file) {
             resemble(this_file).compareTo(last_file)
                 .onComplete(function (data) {
@@ -62,7 +66,7 @@ function processFiles() {
         files.forEach(file => {
             let filepath = path.join(imagesRoot, file);
             if (/^\d+\.png$/.test(file)) {
-                console.log('picking up ' + file);
+                console.log('processing ' + file);
 
                 let birthtime = fs.statSync(filepath).birthtime;
                 let match = false;
@@ -88,33 +92,33 @@ function processFiles() {
                             console.log(t.name);
                             console.log(t.confidence);
 
-                            
-                            if (t.name == 'raccoon'){
-                                var process = spawn('python',["turnon.py"]);
-                                setTimeout(()=> { var process = spawn('python',["turnon.py"]);},5000);
+
+                            if (t.name == 'raccoon') {
+                                var process = spawn('python', ["turnon.py"]);
+                                setTimeout(() => { var process = spawn('python', ["turnon.py"]); }, 5000);
                                 console.log('WE FOUND A RACCOON!!!');
-                                 console.log('WE FOUND A RACCOON!!!');
-                                  console.log('WE FOUND A RACCOON!!!');
-                                   console.log('WE FOUND A RACCOON!!!');
-                                    console.log('WE FOUND A RACCOON!!!');
-                                     console.log('SHOOT IT WITH WATER!!!');
-                                        console.log('                   __        .-.');
-                                        console.log('               .-"` .` .    |\\| ');  
-                                        console.log('       _(\-/)_" ,  .   ,\  /\\\/ ');
-                                        console.log('      {(#b^d#)} .   ./,  |/\\\/  ');
-                                        console.log('      `-.(Y).-`  ,  |  , |\.-`   ');
-                                        console.log('           /~/,_/~~~\,__.-`         ');
-                                        console.log('          ////~    // ~\\');
-                                        console.log('         ==`==`   ==`   ==  ');
-                                     
-                                
+                                console.log('WE FOUND A RACCOON!!!');
+                                console.log('WE FOUND A RACCOON!!!');
+                                console.log('WE FOUND A RACCOON!!!');
+                                console.log('WE FOUND A RACCOON!!!');
+                                console.log('SHOOT IT WITH WATER!!!');
+                                console.log('                   __        .-.');
+                                console.log('               .-"` .` .    |\\| ');
+                                console.log('       _(\-/)_" ,  .   ,\  /\\\/ ');
+                                console.log('      {(#b^d#)} .   ./,  |/\\\/  ');
+                                console.log('      `-.(Y).-`  ,  |  , |\.-`   ');
+                                console.log('           /~/,_/~~~\,__.-`         ');
+                                console.log('          ////~    // ~\\');
+                                console.log('         ==`==`   ==`   ==  ');
+
+
                             }
 
 
-/*                            // if confident, upload to blob storage
-                            store.save(filepath, result => {
-
-                            });*/
+                            /*                            // if confident, upload to blob storage
+                                                        store.save(filepath, result => {
+                            
+                                                        });*/
 
                         });
 
