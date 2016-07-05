@@ -11,7 +11,7 @@ let DIFFERENCE_THRESHOLD = 1; //percent
 let recordingStart = null;
 let recordingTimer;
 
-let imagesRoot = path.join('..', 'images');
+let imagesRoot = path.join('../', 'wackcoon-camera');
 let imageEvents: any[] = [];
 
 //start with a clean folder
