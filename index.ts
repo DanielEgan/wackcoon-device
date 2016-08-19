@@ -48,8 +48,12 @@ fs.watch(imagesRoot, (event, filename) => {
         let this_file = fs.readFileSync(path.join(imagesRoot, filename));
         
         if (last_file) {
+            console.log('comparing');
             resemble(this_file).compareTo(last_file)
                 .onComplete(function (data) {
+                    console.log('here');
+                    
+                    // console.log('mismatch: ' + data.misMatchPercentage);
                     if (parseFloat(data.misMatchPercentage) > DIFFERENCE_THRESHOLD)
                         imageEvents.push(Date.now());
                 });

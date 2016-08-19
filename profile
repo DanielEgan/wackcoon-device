@@ -1,0 +1,10 @@
+export AZURE_STORAGE_ACCOUNT=wackcoon
+export AZURE_STORAGE_ACCESS_KEY=c9PEm5W1vMWgnGx3JGrSuBrNObAT6+RSmpGvOv/+bN0HbjqMpqKe8SB4DlqtvCMlNTRF9spgpFz1/p8ZNjdDzw==
+export WACKCOON1_DEVICE_ID=cfed2
+export WACKCOON1_DEVICE_KEY=hjRZk/m1c9wGwsulDVakFwR73XSkWDHOTGKi0IHx6UU=
+export WACKCOON1_CONNECTIONSTRING='HostName=wackcoon.azure-devices.net;SharedAccessKeyName=iothubowner;SharedAccessKey=ob0vN52kVF1b7yv4SHt5b6jI7IytX0hanQdg9mDTMXk='
+export WACKCOON1_DEVICE_CONNECTIONSTRING='HostName=wackcoon.azure-devices.net;DeviceId=cfed2;SharedAccessKey=hjRZk/m1c9wGwsulDVakFwR73XSkWDHOTGKi0IHx6UU='
+export WACKCOON1_EVENT_HUB_HOST='iothub-ns-wackcoon-45111-22fed9a557.servicebus.windows.net'
+export WACKCOON1_SASKEY=ob0vN52kVF1b7yv4SHt5b6jI7IytX0hanQdg9mDTMXk=
+export WACKCOON1_EVENT_HUB_NAME=wackcoon
+PATH=$PATH:~/bin/ffmpeg
